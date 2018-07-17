@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "259955267674",
+    "firebase_url": "https://residentia-cap2.firebaseio.com",
+    "project_id": "residentia-cap2",
+    "storage_bucket": "residentia-cap2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259955267674:android:ac906d34c3a1922e",
+        "android_client_info": {
+          "package_name": "capstone.tip.residentia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259955267674-i61e8d4uoonrpmoh3tge93eag3o94jnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ-C8TeZ4GoY_c2xyOYaKwl0AbsJY_Svc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
