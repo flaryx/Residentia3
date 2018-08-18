@@ -15,14 +15,20 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import capstone.tip.residentia.R;
+import capstone.tip.residentia.models.User;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword;
+    private EditText inputEmail, inputPassword, inputUname;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
+
+    private DatabaseReference mDatabase;
     private FirebaseAuth auth;
 
     @Override
@@ -32,10 +38,14 @@ public class SignupActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
         inputEmail = (EditText) findViewById(R.id.email);
+        inputUname = (EditText) findViewById(R.id.uname);
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
@@ -91,8 +101,9 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                    finish();
+                                    //startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    //finish();
+                                    createNewUser(task.getResult().getUser());
                                 }
                             }
                         });
@@ -100,6 +111,39 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void createNewUser(FirebaseUser user) {
+
+        String username = usernameFromEmail(user.getEmail());
+
+        // Write new user
+        writeNewUser(user.getUid(), username, user.getEmail());
+        startActivity(new Intent(SignupActivity.this, MainActivity.class));
+        finish();
+
+     //   String username = inputUname.getText().toString();
+       // String email = inputEmail.getText().toString();
+       // String userId = FirebaseAuth.getInstance().getUid();
+
+    }
+
+    // [START basic_write]
+    private void writeNewUser(String userId, String name, String email) {
+        User user = new User(name, email);
+
+        mDatabase.child("users").child(userId).setValue(user);
+    }
+    // [END basic_write]
+
+    private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
+        }
+    }
+
+
 
     @Override
     protected void onResume() {
