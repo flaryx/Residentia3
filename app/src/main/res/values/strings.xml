@@ -27,8 +27,8 @@
 
     <!-- Navigation Drawer menu labels -->
     <string name="nav_home">Home</string>
-    <string name="nav_calendar">Calendar</string>
     <string name="nav_notifications">Notifications</string>
+    <string name="nav_calendar">Calendar</string>>
     <string name="nav_report">Report</string>
     <string name="nav_alert">Alert</string>
 
@@ -36,8 +36,8 @@
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
-        <item>Calendar</item>
         <item>Notifications</item>
+        <item>Calendar</item>
         <item>Report</item>
         <item>Alert</item>
     </string-array>
@@ -49,8 +49,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="homefragment">HOME TEST</string>
-    <string name="eventsfragment">EVENTS TEST</string>
     <string name="notificationsfragment">NOTIF TEST</string>
+    <string name="eventsfragment">EVENTS TEST</string>
     <string name="reportfragment">REPORT TEST</string>
     <string name="alertfragment">ALERT TEST</string>
 
@@ -71,8 +71,8 @@
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
-    <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
-    <string name="btn_link_to_login">Already registered. Login Me!</string>
+    <string name="btn_link_to_register">Not a member? Click here to register!</string>
+    <string name="btn_link_to_login">Already registered? Login!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_reset_password">Reset Password</string>
@@ -83,7 +83,15 @@
     <string name="btn_remove">Remove</string>
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
-    <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="forgot_password_msg">We just need your registered Email Id to send you the password reset instructions directly to your email account.</string>
 
+    <!-- facebook login -->
+    <string name="facebook_app_id">1102265543254445</string>
+    <string name="fb_login_protocol_scheme">fb1102265543254445</string>
+
+    <!-- Chat -->
+    <string name="chat_input">Enter message here!</string>
+    <string name="chat_init_error">Failed to connect to database!</string>
+    <string name="chat_logout">Logout</string>
 
 </resources>

@@ -25,6 +25,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,16 +40,17 @@ import capstone.tip.residentia.fragment.EventsFragment;
 import capstone.tip.residentia.fragment.HomeFragment;
 import capstone.tip.residentia.fragment.NotificationsFragment;
 import capstone.tip.residentia.fragment.ReportFragment;
+import capstone.tip.residentia.other.ActivityCallback;
 import capstone.tip.residentia.other.CircleTransform;
 
 public class MainActivity extends AppCompatActivity
 
-   implements HomeFragment.OnFragmentInteractionListener,
+   implements ActivityCallback,
+        HomeFragment.OnFragmentInteractionListener,
     EventsFragment.OnFragmentInteractionListener,
   AlertFragment.OnFragmentInteractionListener,
             NotificationsFragment.OnFragmentInteractionListener,
             ReportFragment.OnFragmentInteractionListener {
-
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView imgNavHeaderBg, imgProfile;
     private TextView txtName, txtWebsite;
     private Toolbar toolbar;
-    private FloatingActionButton fab;
+
 
     // urls to load navigation header background image
     // and profile image
@@ -90,6 +93,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -109,11 +114,15 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
+        //facebook
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
         mHandler = new Handler();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -125,13 +134,7 @@ public class MainActivity extends AppCompatActivity
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "TEST TEST PALANG", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         // load nav menu header data
         loadNavHeader();
@@ -145,6 +148,28 @@ public class MainActivity extends AppCompatActivity
             loadHomeFragment();
         }
     }
+
+
+    @Override
+    public void openChat() {
+
+    }
+
+    @Override
+    public void openCreateAccount() {
+
+    }
+
+    @Override
+    public void logoutAcc() {
+
+    }
+
+
+
+
+
+
 
     /***
      * Load navigation menu header information
@@ -190,8 +215,7 @@ public class MainActivity extends AppCompatActivity
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
 
-            // show or hide the fab button
-            toggleFab();
+
             return;
         }
 
@@ -217,8 +241,7 @@ public class MainActivity extends AppCompatActivity
             mHandler.post(mPendingRunnable);
         }
 
-        // show or hide the fab button
-        toggleFab();
+
 
         //Closing drawer on item click
         drawer.closeDrawers();
@@ -236,15 +259,13 @@ public class MainActivity extends AppCompatActivity
                 return homeFragment;
 
             case 1:
-                // calendar or events
+                // notif
                 NotificationsFragment notificationsFragment = new NotificationsFragment();
                 return notificationsFragment;
-
             case 2:
-                // notif
-            EventsFragment eventsFragment = new EventsFragment();
-            return eventsFragment;
-
+                // calendar or events
+                EventsFragment eventsFragment = new EventsFragment();
+                 return eventsFragment;
             case 3:
                 // report
                 ReportFragment reportFragment = new ReportFragment();
@@ -283,14 +304,15 @@ public class MainActivity extends AppCompatActivity
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
-                    case R.id.nav_calendar:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_CALENDAR;
-                        break;
                     case R.id.nav_notifications:
-                        navItemIndex = 2;
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_NOTIFICATIONS;
                         break;
+                    case R.id.nav_calendar:
+                        navItemIndex = 2;
+                        CURRENT_TAG = TAG_CALENDAR;
+                        break;
+
                     case R.id.nav_report:
                         navItemIndex = 3;
                         CURRENT_TAG = TAG_REPORT;
@@ -373,7 +395,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // when fragment is notifications, load the menu created for notifications
-        if (navItemIndex == 3) {
+        if (navItemIndex == 1) {
             getMenuInflater().inflate(R.menu.notifications, menu);
         }
         return true;
@@ -391,6 +413,7 @@ public class MainActivity extends AppCompatActivity
            // Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
            // return true;
             auth.signOut();
+            LoginManager.getInstance().logOut();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }
@@ -410,14 +433,15 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    // show or hide the fab
-    private void toggleFab() {
-        if (navItemIndex == 0)
-            fab.show();
-        else
-            fab.hide();
-    }
+
+
+
+
+
+
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
     }
+
+
 }

@@ -1,5 +1,6 @@
 package capstone.tip.residentia.fragment;
 
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,22 +8,40 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import capstone.tip.residentia.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ReportFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ReportFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ReportFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+
+    public TextView ReportText;
+    public Button ReportBtn;
+    public DatabaseReference mDB;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -30,42 +49,76 @@ public class ReportFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+
+
+
+
     public ReportFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReportFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReportFragment newInstance(String param1, String param2) {
-        ReportFragment fragment = new ReportFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+    @IgnoreExtraProperties
+    public  class reportMethod {
+
+        public String report;
+
+
+        // Default constructor required for calls to
+        // DataSnapshot.getValue(User.class)
+        public reportMethod() {
+        }
+
+        public reportMethod(String report) {
+            this.report = report;
+
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false);
+        View v = inflater.inflate(R.layout.fragment_report, container, false);
+
+        final FirebaseDatabase mDB = FirebaseDatabase.getInstance();
+       final DatabaseReference myRef = mDB.getReference("REPORTS");
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+         ReportText = (EditText) v.findViewById(R.id.report_text);
+        ReportBtn =  v.findViewById(R.id.report_btn);
+
+        ReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                Toast toast;
+                Date currentTime = Calendar.getInstance().getTime();
+                String date = currentTime.toString();
+                String currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
+                String cUser = currentFirebaseUser.toString();
+                String userId = myRef.push().getKey();
+                String reportTxt = ReportText.getText().toString();
+                myRef.child(cUser).child("reportField").setValue(reportTxt);
+                myRef.child(cUser).child("userId").setValue(currentFirebaseUser);
+                myRef.child(cUser).child("date").setValue(date);
+
+
+                if (reportTxt == null){
+                    toast = Toast.makeText(getContext(), "Type a report first before submitting", Toast.LENGTH_SHORT);
+                    toast.show();
+                }else if(reportTxt != null){
+                    toast = Toast.makeText(getContext(), "Thank you for submitting a report", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+
+                                     }
+        );
+
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

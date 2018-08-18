@@ -7,6 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+
 
 import capstone.tip.residentia.R;
 
@@ -65,7 +75,13 @@ public class AlertFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_alert, container, false);
+        View RootView = inflater.inflate(R.layout.fragment_alert, container, false);
+
+
+
+
+
+        return RootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
