@@ -3,6 +3,7 @@ package capstone.tip.residentia.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.content.Context;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,6 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import capstone.tip.residentia.R;
 import capstone.tip.residentia.models.User;
+import capstone.tip.residentia.other.ActivityCallback;
+import capstone.tip.residentia.other.Utils;
+
+
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -31,6 +37,10 @@ public class SignupActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseAuth auth;
 
+    /** Activity callback **/
+    private ActivityCallback mCallback;
+
+    @Nullable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +113,11 @@ public class SignupActivity extends AppCompatActivity {
                                 } else {
                                     //startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                     //finish();
+                                    Utils.saveLocalUser(SignupActivity.this,
+                                            inputUname.getText().toString(),
+                                            inputEmail.getText().toString(),
+                                            task.getResult().getUser().getUid());
+
                                     createNewUser(task.getResult().getUser());
                                 }
                             }
@@ -110,7 +125,11 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
+
+
 
     private void createNewUser(FirebaseUser user) {
 
@@ -150,4 +169,6 @@ public class SignupActivity extends AppCompatActivity {
         super.onResume();
         progressBar.setVisibility(View.GONE);
     }
+
+
 }

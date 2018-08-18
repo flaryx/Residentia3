@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        mUsername = Utils.getLocalUsername(getContext());
+       mUsername = Utils.getLocalUsername(getContext());
         mUserId = Utils.getLocalUserId(getContext());
 
         setupConnection();

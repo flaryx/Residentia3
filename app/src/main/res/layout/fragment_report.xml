@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="72dp"
-        android:text="Input your reports below"
+        android:text="Input your reports"
         android:textSize="30sp"
         android:textStyle="bold" />
 

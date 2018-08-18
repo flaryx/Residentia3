@@ -1,9 +1,13 @@
 package capstone.tip.residentia.other;
 
+
 /**
  * Interface responsible to hold all the constants
  * of the application
  */
+
+
+
 public interface Constants {
 
     String SHARED_PREFERENCES = "APP_PREFS";
